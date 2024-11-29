@@ -1,0 +1,25 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  	config.vm.box = "ubuntu/bionic64"
+  	config.vm.hostname = "lufucx"
+	
+	# Configuração da rede
+	config.vm.network "forwarded_port", guest: 80, host: 8090
+	
+	# Provisionamento com script inline
+	config.vm.provision "shell", inline: <<-SHELL
+		apt update
+		apt install apache2 -y
+		systemctl start apache2
+	SHELL
+	
+	#config.vm.provision :shell, path: "script.sh"
+
+	config.vm.provider "virtualbox" do |vb|
+		vb.memory = "4096"
+		vb.cpus = "2"
+		vb.name = "ubuntu-linux"
+	end
+end
